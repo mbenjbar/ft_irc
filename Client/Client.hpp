@@ -41,10 +41,10 @@ public:
     void set_Has_user(bool value);
     void set_Registered(bool value);
 
-    void append_buff(std::string &received);
+    void append_buff(const std::string &received);
     void clear_buff();
 
-    void send_msg(std::string &msg) const;
+    void send_msg(const std::string &msg) const;
 
     std::string make_prefix() const;
 };

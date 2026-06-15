@@ -35,9 +35,9 @@ void Client::set_Has_user(bool value) {has_user = value;}
 void Client::set_Registered(bool value) {registered = value;}
 
 
-void Client::append_buff(std::string &received) {buffer = buffer + received;}
+void Client::append_buff(const std::string &received) {buffer = buffer + received;}
 void Client::clear_buff() {buffer.clear();}
 
-void Client::send_msg(std::string &msg) const {send(_fd, &msg, msg.size(),0);}
+void Client::send_msg(const std::string &msg) const {send(_fd, &msg, msg.size(),0);}
 
 std::string Client::make_prefix() const {return (nickname + "!" + username + "@localhost");}
