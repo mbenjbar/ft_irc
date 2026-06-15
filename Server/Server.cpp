@@ -2,23 +2,18 @@
 
 Server::~Server()
 {
-    if (fd_epoll)
-        close (fd_epoll);
-    if (fd_server)
-        close (fd_server);
+    if (fd_epoll) close (fd_epoll);
+    if (fd_server) close (fd_server);
     Clients.clear();
 }
 
 Server::Server(int port, std::string password)
 {
-    _port = port;
-    _password = password;
-    fd_server = -1;
-    fd_epoll = -1;
+    _port = port; _password = password; fd_server = -1; fd_epoll = -1;
 
     fd_server = socket(AF_INET, SOCK_STREAM, 0);
-    if (fd_server< 0)
-        throw Serv_Exception("socket Failed");
+    if (fd_server< 0)   throw Serv_Exception("socket Failed");
+
     int option = 1;
     if (setsockopt(fd_server, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option)) < 0) //socket address can be reused, no waiting opt = 1 -> enable SO_REUSEADDR 
     {
@@ -54,34 +49,33 @@ Server::Server(int port, std::string password)
 void Server::run(int &run)
 {
     fd_epoll = epoll_create(1);
-    if (fd_epoll < 0)
-        throw Serv_Exception("epoll_create Failed");
+    if (fd_epoll < 0) throw Serv_Exception("epoll_create Failed");
+    
     epoll_event event_ctrl;
     event_ctrl.events = EPOLLIN;
     event_ctrl.data.fd = fd_server;
     if (epoll_ctl(fd_epoll, EPOLL_CTL_ADD, fd_server, &event_ctrl) < 0)
         throw Serv_Exception("epoll_ctl Failed");
-    std::cout << "Server listening on port " << _port << "..." << std::endl;
-
+    
+    std::cout << "Server listening on port " << _port << ".." << std::endl;
     epoll_event events[MAX_EVENT];
     while (run == 1)
     {
         int event_hap = epoll_wait(fd_epoll, events, MAX_EVENT, -1); // -1 means wait infinetly (otherwise it is the max t to wait in ms)
         if (event_hap < 0)
-        {
             if (errno == EINTR)
                 continue; //signal interrupted the server like ctrl+c but gotta keep server workinng
-        }
         int i = 0;
         while (i++ < event_hap)
         {
             if (events[i].data.fd == fd_server)
                 if (new_client() < 0)
                     continue;
+
             else if (events[i].events & EPOLLIN)
             {
                 int fd_recv = events[i].data.fd;
-                char buffer[1024];
+                char buffer[BUFFER_SIZE];
                 int bytes = recv(fd_recv, &buffer, sizeof(buffer) - 1, 0);
                 if (bytes <= 0)
                 {
@@ -97,7 +91,6 @@ void Server::run(int &run)
             }
         }
     }
-
 }
 
 void Server::handle_buff(Client &current)
@@ -112,6 +105,7 @@ void Server::handle_buff(Client &current)
             if (command[command.length() - 1] == '\r') command.pop_back();
             handle_command(command, current);
         }
+        i = buf.find('\n');
     }
 }
 
@@ -141,9 +135,9 @@ int Server::new_client()
 {
     int fd_client = -1;
     sockaddr_in client_addr;
-    socklen_t client_adr_len = sizeof(client_addr);
+    socklen_t client_addr_len = sizeof(client_addr);
     epoll_event event_ctrl;
-    fd_client = accept(fd_server, (sockaddr *)&client_addr, &client_adr_len);
+    fd_client = accept(fd_server, (sockaddr *)&client_addr, &client_addr_len);
     if (fd_client < 0)
     {
         std::cerr << "accept failed" << std::endl;
@@ -165,12 +159,10 @@ int Server::new_client()
     }
     std::cout << "Client connected from " << inet_ntoa(client_addr.sin_addr) << ":" << ntohs(client_addr.sin_port) << std::endl;
     Clients.insert(std::make_pair(fd_client, Client(fd_client)));
-
 }
 
 
 // Exception FCT
-
 Server::Serv_Exception::Serv_Exception(std::string error_msg): msg(error_msg) {}
 const char *Server::Serv_Exception::what() const throw() {return msg.c_str();}
 Server::Serv_Exception::~Serv_Exception() throw() {}

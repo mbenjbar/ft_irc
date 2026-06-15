@@ -22,7 +22,6 @@ public:
     Client(int fd);
     ~Client();
 
-
     int getFd() const;
     const std::string &get_Nickname() const;
     const std::string &get_Username() const;
@@ -43,8 +42,6 @@ public:
 
     void append_buff(const std::string &received);
     void clear_buff();
-
     void send_msg(const std::string &msg) const;
-
     std::string make_prefix() const;
 };

@@ -16,39 +16,38 @@
 #include <map>  // Container
 #include <cctype> // isdigit() toupper()
 #include "string.h"
-#define MAX_EVENT 10
+#define MAX_EVENT 32
+#define BUFFER_SIZE 1024
 
 class Server
 {
 private:
     int fd_server;
     int fd_epoll;
-    bool running_state;
     int _port;
     std::string _password;
     std::map<int , Client> Clients;
     std::map<std::string, Channel> Channels;
-    int new_client();
-    void handle_buff(Client &);
-    void handle_command(std::string, Client &);
+    int     new_client();
+    void    handle_buff(Client &);
+    void    handle_command(std::string, Client &);
 
-    void handlePass(Client &, std::string receive);
-	void handleNick(Client &, std::string receive);
-	void handleUser(Client &, std::string receive);
-	void handleJoin(Client &, std::string receive);
-	void handlePart(Client &, std::string receive);
-	void handlePrivmsg(Client &, std::string receive);
-	void handleMan(Client &, std::string receive);
-	void handleTopic(Client &, std::string receive);
-	void handleInvite(Client &, std::string receive);
-	void handleKick(Client &, std::string receive);
-	void handleMode(Client &, std::string receive);
+    void    handlePass(Client &, std::string receive);
+	void    handleNick(Client &, std::string receive);
+	void    handleUser(Client &, std::string receive);
+	void    handleJoin(Client &, std::string receive);
+	void    handlePart(Client &, std::string receive);
+	void    handlePrivmsg(Client &, std::string receive);
+	void    handleMan(Client &, std::string receive);
+	void    handleTopic(Client &, std::string receive);
+	void    handleInvite(Client &, std::string receive);
+	void    handleKick(Client &, std::string receive);
+	void    handleMode(Client &, std::string receive);
 
 public:
     Server(int port, std::string password);
     ~Server();
-
-    void run(int &run);
+    void    run(int &run);
 
     class Serv_Exception : public std::exception
     {
@@ -58,7 +57,5 @@ public:
             Serv_Exception(std::string error_msg);
             const char *what() const throw();
             ~Serv_Exception() throw();
-    };
-
-    
+    };    
 };

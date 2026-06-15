@@ -15,7 +15,6 @@ Client::Client(int fd)
 
 Client::~Client() {}
 
-
 int Client::getFd() const {return _fd;}
 const std::string &Client::get_Nickname() const {return nickname;}
 const std::string &Client::get_Username() const {return username;}
@@ -37,7 +36,5 @@ void Client::set_Registered(bool value) {registered = value;}
 
 void Client::append_buff(const std::string &received) {buffer = buffer + received;}
 void Client::clear_buff() {buffer.clear();}
-
 void Client::send_msg(const std::string &msg) const {send(_fd, &msg, msg.size(),0);}
-
 std::string Client::make_prefix() const {return (nickname + "!" + username + "@localhost");}
