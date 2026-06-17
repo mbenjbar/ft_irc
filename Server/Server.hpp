@@ -16,6 +16,9 @@
 #include <map>  // Container
 #include <cctype> // isdigit() toupper()
 #include "string.h"
+#include <cstdio>
+#include <cstdlib>
+#include <csignal>
 #define MAX_EVENT 32
 #define BUFFER_SIZE 1024
 
@@ -32,17 +35,17 @@ private:
     void    handle_buff(Client &);
     void    handle_command(std::string, Client &);
 
-    void    handlePass(Client &, std::string receive);
-	void    handleNick(Client &, std::string receive);
-	void    handleUser(Client &, std::string receive);
-	void    handleJoin(Client &, std::string receive);
-	void    handlePart(Client &, std::string receive);
-	void    handlePrivmsg(Client &, std::string receive);
-	void    handleMan(Client &, std::string receive);
-	void    handleTopic(Client &, std::string receive);
-	void    handleInvite(Client &, std::string receive);
-	void    handleKick(Client &, std::string receive);
-	void    handleMode(Client &, std::string receive);
+    void    Pass(Client &, std::string receive);
+	void    Nick(Client &, std::string receive);
+	void    User(Client &, std::string receive);
+	void    Join(Client &, std::string receive);
+	void    Part(Client &, std::string receive);
+	void    Privmsg(Client &, std::string receive);
+	void    Man(Client &, std::string receive);
+	void    Topic(Client &, std::string receive);
+	void    Invite(Client &, std::string receive);
+	void    Kick(Client &, std::string receive);
+	void    Mode(Client &, std::string receive);
 
 public:
     Server(int port, std::string password);
