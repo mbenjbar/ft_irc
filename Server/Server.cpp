@@ -63,32 +63,33 @@ void Server::run(int &run)
     {
         int event_hap = epoll_wait(fd_epoll, events, MAX_EVENT, -1); // -1 means wait infinetly (otherwise it is the max t to wait in ms)
         if (event_hap < 0)
-            if (errno == EINTR)
-                continue; //signal interrupted the server like ctrl+c but gotta keep server workinng
+            {if (errno == EINTR)
+                continue;} //signal interrupted the server like ctrl+c but gotta keep server workinng
         int i = 0;
-        while (i++ < event_hap)
+        while (i < event_hap)
         {
-            if (events[i].data.fd == fd_server)
-                if (new_client() < 0)
-                    continue;
+            if (events[i].data.fd == fd_server && (events[i].events & EPOLLIN))
+                {if (new_client() < 0)
+                    {i++; continue;}}
 
             else if (events[i].events & EPOLLIN)
             {
                 int fd_recv = events[i].data.fd;
                 char buffer[BUFFER_SIZE];
-                int bytes = recv(fd_recv, &buffer, sizeof(buffer) - 1, 0);
+                int bytes = recv(fd_recv, buffer, sizeof(buffer) - 1, 0);
                 if (bytes <= 0)
                 {
                     std::cout << "client with fd: " << fd_recv <<" disconnected" << std::endl;
                     epoll_ctl(fd_epoll, EPOLL_CTL_DEL, fd_recv, NULL);
                     close(fd_recv);
                     if (Clients.find(fd_recv) != Clients.end()) Clients.erase(fd_recv);
+                    i++;
                     continue;
                 }
-                buffer[bytes] = '\0';
                 std::map<int, Client>::iterator iter = Clients.find(fd_recv);
                 if (iter != Clients.end()) {iter->second.append_buff(std::string(buffer, bytes)); handle_buff(iter->second);}
             }
+            i++;
         }
     }
 }
@@ -96,39 +97,40 @@ void Server::run(int &run)
 void Server::handle_buff(Client &current)
 {
     std::string buf = current.get_Buffer();
-    int i = buf.find('\n');
-    while (i != std::string::npos)
+    size_t i;
+    while ((i = buf.find('\n')) != std::string::npos)
     {
         std::string command = buf.substr(0, i); // exclude \n
         if (!command.empty()) 
         {
-            if (command[command.length() - 1] == '\r') command.pop_back();
+            if (command[command.length() - 1] == '\r') command.erase(command.size() - 1);
             handle_command(command, current);
         }
-        i = buf.find('\n');
+        buf.erase(0, i + 1);
     }
+    current.set_buffer(buf);
 }
 
-void Server::handle_command(std::string receive, Client &Client)
+void Server::handle_command(std::string receive, Client &client)
 {
     std::stringstream s(receive);
     std::string command;
     if (!(s >> command)) return;
-    for (int i = 0; i < command.size(); i++) command[i] = toupper(command[i]);
-    std::string msg = ":localhost 421 " + Client.get_Nickname() + " " + command + " :Unknown command\r\n";
+    for (size_t i = 0; i < command.size(); i++) command[i] = toupper(command[i]);
+    std::string msg = ":localhost 421 " + client.get_Nickname() + " " + command + " :Unknown command\r\n";
 
-    if (command == "PASS") Pass(Client, receive);
-	else if (command == "NICK") Nick(Client, receive);
-	else if (command == "USER") User(Client, receive);
-	else if (command == "JOIN") Join(Client, receive);
-	else if (command == "PART") Part(Client, receive);
-	else if (command == "PRIVMSG") Privmsg(Client, receive);
-	else if (command == "MAN") Man(Client, receive);
-	else if (command == "TOPIC") Topic(Client, receive);
-	else if (command == "INVITE") Invite(Client, receive);
-	else if (command == "KICK") Kick(Client, receive);
-	else if (command == "MODE") Mode(Client, receive);
-    else Client.send_msg(msg);
+    if (command == "PASS") Pass(client, receive);
+	else if (command == "NICK") Nick(client, receive);
+	else if (command == "USER") User(client, receive);
+	else if (command == "JOIN") Join(client, receive);
+	else if (command == "PART") Part(client, receive);
+	else if (command == "PRIVMSG") Privmsg(client, receive);
+	else if (command == "MAN") Man(client, receive);
+	else if (command == "TOPIC") Topic(client, receive);
+	else if (command == "INVITE") Invite(client, receive);
+	else if (command == "KICK") Kick(client, receive);
+	else if (command == "MODE") Mode(client, receive);
+    else client.send_msg(msg);
 }
 
 int Server::new_client()
@@ -159,6 +161,7 @@ int Server::new_client()
     }
     std::cout << "Client connected from " << inet_ntoa(client_addr.sin_addr) << ":" << ntohs(client_addr.sin_port) << std::endl;
     Clients.insert(std::make_pair(fd_client, Client(fd_client)));
+    return 0;
 }
 
 

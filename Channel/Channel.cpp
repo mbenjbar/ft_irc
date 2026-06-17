@@ -56,7 +56,7 @@ void Channel::remove_invit(int fd)
 }
 int Channel::is_invit(int fd) const
 {
-    int i = 0;
+    size_t i = 0;
     while (i++ < invit_list.size())
     {
         if (invit_list[i] == fd)

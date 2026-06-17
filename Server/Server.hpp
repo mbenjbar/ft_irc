@@ -21,6 +21,7 @@
 #include <csignal>
 #define MAX_EVENT 32
 #define BUFFER_SIZE 1024
+class Channel; //circular include loop between Channel.hpp and Server.hpp
 
 class Server
 {

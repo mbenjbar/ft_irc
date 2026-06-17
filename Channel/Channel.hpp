@@ -12,7 +12,6 @@ private:
     std::string             topic;
     std::string             password;
     std::map<int, Client *>  users;
-    int nbr_of_users;
     std::map<int, Client *>  operators;  
     std::vector<int>        invit_list;
     int                     members_limit;
