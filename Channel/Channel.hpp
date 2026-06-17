@@ -1,7 +1,9 @@
 #pragma once
 #include "../Client/Client.hpp"
 #include "../Server/Server.hpp"
+#include <string>
 #include <map>
+#include <vector>
 
 class Channel
 {

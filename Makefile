@@ -5,7 +5,7 @@ SRC = main.cpp Server/Server.cpp Client/Client.cpp Channel/Channel.cpp Commands/
 		Commands/kick.cpp Commands/manual.cpp Commands/mode.cpp Commands/nick.cpp Commands/part.cpp Commands/pass.cpp \
 		Commands/privmsg.cpp Commands/topic.cpp Commands/user.cpp
 
-OBJ = $(SRC:.cpp =.o)
+OBJ = $(SRC:.cpp=.o)
 
 all: $(NAME)
 
@@ -16,9 +16,11 @@ $(NAME): $(OBJ)
 	$(CXX) $(FLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJ)
+	rm -f $(OBJ)
 
 fclean: clean
-	rm -rf $(NAME)
+	rm -f $(NAME)
 	
 re: fclean all
+
+.PHONY: all clean fclean re
