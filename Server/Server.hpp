@@ -24,6 +24,9 @@
 #define ERR_NEEDMOREPARAMS std::string("461 ")
 #define ERR_ALREADYREGISTRED std::string("462 ")
 #define ERR_PASSWDMISMATCH std::string("464 ")
+#define ERR_NICKNAMEINUSE std::string("433 ")
+#define RPL_WELCOME std::string("001 ")
+#define ERR_NOTREGISTERED std::string("451 ")
 class Channel; //circular include loop between Channel.hpp and Server.hpp
 
 class Server
