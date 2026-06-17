@@ -21,6 +21,9 @@
 #include <csignal>
 #define MAX_EVENT 32
 #define BUFFER_SIZE 1024
+#define ERR_NEEDMOREPARAMS std::string("461 ")
+#define ERR_ALREADYREGISTRED std::string("462 ")
+#define ERR_PASSWDMISMATCH std::string("464 ")
 class Channel; //circular include loop between Channel.hpp and Server.hpp
 
 class Server
