@@ -19,7 +19,7 @@ const std::string &Channel::get_password() const {return password;}
 
 const std::map<int, Client *>& Channel::get_users() const {return users;}
 size_t Channel::get_nbr_of_users() const {return users.size();}
-const int Channel::get_members_limit() const {return members_limit;}
+int Channel::get_members_limit() const {return members_limit;}
 const std::map<int, Client *> &Channel::get_operators() const {return operators;}
 const std::vector<int> &Channel::get_invit_list() const {return invit_list;}
     

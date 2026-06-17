@@ -1,6 +1,7 @@
 #pragma once
 #include "../Client/Client.hpp"
 #include "../Server/Server.hpp"
+#include <map>
 
 class Channel
 {
@@ -29,7 +30,7 @@ public:
 
     const std::map<int, Client *> &get_users() const;
     size_t get_nbr_of_users() const;
-    const int get_members_limit() const;
+    int get_members_limit() const;
     const std::map<int, Client *> &get_operators() const;
     const std::vector<int> &get_invit_list() const;
     

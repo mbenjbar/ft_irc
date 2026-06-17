@@ -117,17 +117,17 @@ void Server::handle_command(std::string receive, Client &Client)
     for (int i = 0; i < command.size(); i++) command[i] = toupper(command[i]);
     std::string msg = ":localhost 421 " + Client.get_Nickname() + " " + command + " :Unknown command\r\n";
 
-    if (command == "PASS") handlePass(Client, receive);
-	else if (command == "NICK") handleNick(Client, receive);
-	else if (command == "USER") handleUser(Client, receive);
-	else if (command == "JOIN") handleJoin(Client, receive);
-	else if (command == "PART") handlePart(Client, receive);
-	else if (command == "PRIVMSG") handlePrivmsg(Client, receive);
-	else if (command == "MAN") handleMan(Client, receive);
-	else if (command == "TOPIC") handleTopic(Client, receive);
-	else if (command == "INVITE") handleInvite(Client, receive);
-	else if (command == "KICK") handleKick(Client, receive);
-	else if (command == "MODE") handleMode(Client, receive);
+    if (command == "PASS") Pass(Client, receive);
+	else if (command == "NICK") Nick(Client, receive);
+	else if (command == "USER") User(Client, receive);
+	else if (command == "JOIN") Join(Client, receive);
+	else if (command == "PART") Part(Client, receive);
+	else if (command == "PRIVMSG") Privmsg(Client, receive);
+	else if (command == "MAN") Man(Client, receive);
+	else if (command == "TOPIC") Topic(Client, receive);
+	else if (command == "INVITE") Invite(Client, receive);
+	else if (command == "KICK") Kick(Client, receive);
+	else if (command == "MODE") Mode(Client, receive);
     else Client.send_msg(msg);
 }
 

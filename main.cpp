@@ -2,7 +2,7 @@
 
 
 int run = 1;
-void handle_signal(int signal) {run = 0;}
+void handle_signal(int) {run = 0;}
 
 
 int main(int ac, char **av)
