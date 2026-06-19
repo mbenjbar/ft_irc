@@ -166,8 +166,6 @@ int Server::new_client()
     return 0;
 }
 
-
-// Exception FCT
 Server::Serv_Exception::Serv_Exception(std::string error_msg): msg(error_msg) {}
 const char *Server::Serv_Exception::what() const throw() {return msg.c_str();}
 Server::Serv_Exception::~Serv_Exception() throw() {}

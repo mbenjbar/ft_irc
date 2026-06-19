@@ -27,6 +27,16 @@
 #define ERR_NICKNAMEINUSE std::string("433 ")
 #define RPL_WELCOME std::string("001 ")
 #define ERR_NOTREGISTERED std::string("451 ")
+#define ERR_NOSUCHCHANNEL std::string("403 ")
+#define ERR_BADCHANMASK std::string("476 ")
+#define ERR_BADCHANNELKEY std::string("475 ")
+#define ERR_CHANNELISFULL std::string("471 ")
+#define ERR_INVITEONLYCHAN std::string("473 ")
+#define RPL_NOTOPIC std::string("331 ")
+#define RPL_TOPIC std::string("332 ")
+#define RPL_NAMREPLY std::string("331 ")
+#define RPL_ENDOFNAMES std::string("366 ")
+
 class Channel; //circular include loop between Channel.hpp and Server.hpp
 
 class Server
@@ -46,6 +56,7 @@ private:
 	void    Nick(Client &, std::string receive);
 	void    User(Client &, std::string receive);
 	void    Join(Client &, std::string receive);
+    void    handle_join(Client &, std::string channel_name, std::string pass);
 	void    Part(Client &, std::string receive);
 	void    Privmsg(Client &, std::string receive);
 	void    Man(Client &, std::string receive);
