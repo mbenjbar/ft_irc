@@ -130,6 +130,8 @@ void Server::handle_command(std::string receive, Client &client)
 	else if (command == "INVITE") Invite(client, receive);
 	else if (command == "KICK") Kick(client, receive);
 	else if (command == "MODE") Mode(client, receive);
+    else if (command == "PING") Ping(client, receive);
+    else if (command == "CAP"){}
     else client.send_msg(msg);
 }
 

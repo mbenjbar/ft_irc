@@ -53,6 +53,7 @@ private:
 	void    Invite(Client &, std::string receive);
 	void    Kick(Client &, std::string receive);
 	void    Mode(Client &, std::string receive);
+    void    Ping(Client &, std::string receive);
 
 public:
     Server(int port, std::string password);

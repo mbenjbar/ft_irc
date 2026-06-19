@@ -14,7 +14,7 @@ void    Server::Pass(Client &current, std::string receive)
     else if (current.is_Registered())
         current.send_msg(":localhost " + ERR_ALREADYREGISTRED + current.get_Nickname() + " PASS :Unauthorized command, already registered\r\n");
 
-    else if (!current.is_Registered() && current.is_passed())
+    else if (current.is_passed())
         current.send_msg(":localhost " + ERR_ALREADYREGISTRED  + current.get_Nickname() + " PASS :password already set\r\n");
 
     else if (arg != _password)
