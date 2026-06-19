@@ -36,6 +36,7 @@
 #define RPL_TOPIC std::string("332 ")
 #define RPL_NAMREPLY std::string("331 ")
 #define RPL_ENDOFNAMES std::string("366 ")
+#define ERR_NOTONCHANNEL std::string("442 ")
 
 class Channel; //circular include loop between Channel.hpp and Server.hpp
 
@@ -58,6 +59,7 @@ private:
 	void    Join(Client &, std::string receive);
     void    handle_join(Client &, std::string channel_name, std::string pass);
 	void    Part(Client &, std::string receive);
+    void    handle_part(Client &, std::string channel_name, std::string reason);
 	void    Privmsg(Client &, std::string receive);
 	void    Man(Client &, std::string receive);
 	void    Topic(Client &, std::string receive);
