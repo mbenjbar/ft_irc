@@ -35,5 +35,4 @@ void    Server::Nick(Client &current, std::string receive)
         current.send_msg(current.msg_host(RPL_WELCOME) + " :Welcome to the Internet Relay Network " + current.make_prefix() + "\r\n");
     }
     else {}
-    
 }
