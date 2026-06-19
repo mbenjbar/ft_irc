@@ -18,7 +18,7 @@ void    Server::Invite(Client &current, std::string receive)
     Channel &chan = Channels.find(cha_name)->second;
 
     std::map<int, Client>::iterator it = Clients.begin();
-    Client *to_invite;
+    Client *to_invite = NULL;
     while (it != Clients.end())
     {
         if (it->second.get_Nickname() == target)
@@ -29,14 +29,14 @@ void    Server::Invite(Client &current, std::string receive)
         it++;
     }
 
-    if (it == Clients.end())
+    if (!to_invite)
         {return (current.send_msg(current.msg_host(ERR_NOSUCHNICK) + " " + target + " :No such nick/channel\r\n"));}
     
     if (chan.is_user(current.getFd()) == false)
         {return (current.send_msg(current.msg_host(ERR_NOTONCHANNEL) + " " + cha_name + " :You're not on that channel\r\n"));}
 
     if (chan.get_invit_only() && chan.is_op(current.getFd()) == false)
-        {return (current.send_msg(current.msg_host(ERR_CHANOPRIVSNEEDED) + " " + cha_name + " :You're not on that channel\r\n"));}
+        {return (current.send_msg(current.msg_host(ERR_CHANOPRIVSNEEDED) + " " + cha_name + " ::You're not channel operator\r\n"));}
     
     if (chan.is_user(to_invite->getFd()))
         {return (current.send_msg(current.msg_host(ERR_USERONCHANNEL) + " " + to_invite->get_Nickname() + " " + cha_name + " :is already on channel\r\n"));}
