@@ -39,3 +39,4 @@ void Client::append_buff(const std::string &received) {buffer = buffer + receive
 void Client::clear_buff() {buffer.clear();}
 void Client::send_msg(const std::string &msg) const {send(_fd, msg.c_str(), msg.size(),0);}
 std::string Client::make_prefix() const {return (nickname + "!" + username + "@localhost");}
+std::string Client::msg_host(std::string flag)const {return (":localhost " + flag + get_Nickname());}

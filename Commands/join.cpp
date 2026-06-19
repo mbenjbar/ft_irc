@@ -25,14 +25,16 @@ void print_users(Client &current, Channel &channel)
         it++;
     }
 
-    current.send_msg(":localhost " + RPL_NAMREPLY + current.get_Nickname() + " = " + channel.get_name() + " :" + list + "\r\n");
-    current.send_msg(":localhost " + RPL_ENDOFNAMES + current.get_Nickname() + " " + channel.get_name() + " :End of /NAMES list\r\n");
+    current.send_msg(current.msg_host(RPL_NAMREPLY) + " = " + channel.get_name() + " :" + list + "\r\n");
+    current.send_msg(current.msg_host(RPL_ENDOFNAMES) + " " + channel.get_name() + " :End of /NAMES list\r\n");
 }
 void Server::handle_join(Client &current, std::string channel_name, std::string pass)
 {
     if (channel_name.empty() || (channel_name[0] != '#' && channel_name[0] != '&' && channel_name[0] != '+' && channel_name[0] != '!')
         || channel_name.find(' ') != std::string::npos || channel_name.find(',') != std::string::npos)
-        {return (current.send_msg(":localhost " + ERR_BADCHANMASK + current.get_Nickname() + " " + channel_name + " :Invalid channel name\r\n"));}
+    {
+        return (current.send_msg(current.msg_host(ERR_BADCHANMASK) + " " + channel_name + " :Invalid channel name\r\n"));
+    }
     
     if (Channels.find(channel_name) == Channels.end()) Channels.insert(std::make_pair(channel_name, Channel(channel_name)));
     
@@ -42,24 +44,24 @@ void Server::handle_join(Client &current, std::string channel_name, std::string 
         return;}
 
     if (tmp.get_has_pswd() && tmp.get_password() != pass)
-        return (current.send_msg(":localhost " + ERR_BADCHANNELKEY + current.get_Nickname() + " " + channel_name + " :Cannot join channel (+k)\r\n"));
+        return (current.send_msg(current.msg_host(ERR_BADCHANNELKEY) + " " + channel_name + " :Cannot join channel (+k)\r\n"));
     
     if (tmp.get_limited() && (int)tmp.get_nbr_of_users() >= tmp.get_members_limit())
-        return (current.send_msg(":localhost " + ERR_CHANNELISFULL + current.get_Nickname() + " " + channel_name + " :Cannot join channel (+l)\r\n"));
+        return (current.send_msg(current.msg_host(ERR_CHANNELISFULL) + " " + channel_name + " :Cannot join channel (+l)\r\n"));
 
     if (tmp.get_invit_only() && !tmp.is_invit(current.getFd()))
-        return (current.send_msg(":localhost " + ERR_INVITEONLYCHAN + current.get_Nickname() + " " + channel_name + " :Cannot join channel (+i)\r\n"));
+        return (current.send_msg(current.msg_host(ERR_INVITEONLYCHAN) + " " + channel_name + " :Cannot join channel (+i)\r\n"));
 
     tmp.add_user(current);
     if (tmp.get_nbr_of_users() == 1) tmp.add_op(current);
     if (tmp.is_invit(current.getFd())) tmp.remove_invit(current.getFd());
 
-    tmp.broadcast(":" + current.get_Nickname() + "!" + current.get_Username() + "@localhost JOIN :" + channel_name + "\r\n", -1);
+    tmp.broadcast(":" + current.make_prefix() + " JOIN :" + channel_name + "\r\n", -1);
 
     if (tmp.get_topic().empty())
-        current.send_msg(":localhost " + RPL_NOTOPIC + current.get_Nickname() + " " + channel_name + " :No topic is set\r\n");
+        current.send_msg(current.msg_host(RPL_NOTOPIC) + " " + channel_name + " :No topic is set\r\n");
     else
-        current.send_msg(":localhost " + RPL_TOPIC + current.get_Nickname() + " " + channel_name + " :" + tmp.get_topic() + "\r\n");
+        current.send_msg(current.msg_host(RPL_TOPIC) + " " + channel_name + " :" + tmp.get_topic() + "\r\n");
     
     print_users(current, Channels.find(channel_name)->second);
 }
@@ -74,9 +76,9 @@ void    Server::Join(Client &current, std::string receive)
     ss >> command >> chan_tmp >> pass_tmp;
 
     if (!current.is_Registered())
-        return (current.send_msg(":localhost " + ERR_NOTREGISTERED + current.get_Nickname() + " JOIN :You have not registered\r\n"));
+        return (current.send_msg(current.msg_host(ERR_NOTREGISTERED) + " JOIN :You have not registered\r\n"));
     if (chan_tmp.empty())
-        return (current.send_msg(":localhost " + ERR_NEEDMOREPARAMS + current.get_Nickname() + " JOIN :Not enough parameters\r\n"));
+        return (current.send_msg(current.msg_host(ERR_NEEDMOREPARAMS) + " JOIN :Not enough parameters\r\n"));
     chans = split(chan_tmp, ',');
     passes = split(pass_tmp, ',');
     size_t i = 0;

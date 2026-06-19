@@ -9,16 +9,16 @@ void    Server::Pass(Client &current, std::string receive)
     ss >> arg; 
     
     if (arg.empty())
-        current.send_msg(":localhost " + ERR_NEEDMOREPARAMS + current.get_Nickname() + " PASS :Not enough parameters\r\n");
+        current.send_msg(current.msg_host(ERR_NEEDMOREPARAMS) + " PASS :Not enough parameters\r\n");
 
     else if (current.is_Registered())
-        current.send_msg(":localhost " + ERR_ALREADYREGISTRED + current.get_Nickname() + " PASS :Unauthorized command, already registered\r\n");
+        current.send_msg(current.msg_host(ERR_ALREADYREGISTRED) + " PASS :Unauthorized command, already registered\r\n");
 
     else if (current.is_passed())
-        current.send_msg(":localhost " + ERR_ALREADYREGISTRED  + current.get_Nickname() + " PASS :password already set\r\n");
+        current.send_msg(current.msg_host(ERR_ALREADYREGISTRED) + " PASS :password already set\r\n");
 
     else if (arg != _password)
-        current.send_msg(":localhost " + ERR_PASSWDMISMATCH + current.get_Nickname() + " PASS :Password is incorrect\r\n");
+        current.send_msg(current.msg_host(ERR_PASSWDMISMATCH) + " PASS :Password is incorrect\r\n");
 
     else
 	{

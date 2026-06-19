@@ -16,13 +16,13 @@ void    Server::User(Client &current, std::string receive)
 
 
     if (!current.is_passed())
-        return (current.send_msg(":localhost " + ERR_NOTREGISTERED + current.get_Nickname() + " USER :You have not registered\r\n"));
+        return (current.send_msg(current.msg_host(ERR_NOTREGISTERED) + " USER :You have not registered\r\n"));
     
     if (current.is_Registered() || current.hasUser())
-        return (current.send_msg(":localhost " + ERR_ALREADYREGISTRED + current.get_Nickname() + " USER :Unauthorized command, already registered\r\n"));
+        return (current.send_msg(current.msg_host(ERR_ALREADYREGISTRED) + " USER :Unauthorized command, already registered\r\n"));
 
     if (username.empty())
-        return (current.send_msg(":localhost " + ERR_NEEDMOREPARAMS + current.get_Nickname() + " USER :Not enough parameters\r\n"));
+        return (current.send_msg(current.msg_host(ERR_NEEDMOREPARAMS) + " USER :Not enough parameters\r\n"));
 
     getline(ss, realname);
     if (!realname.empty() && realname[0] == ' ')
@@ -38,7 +38,7 @@ void    Server::User(Client &current, std::string receive)
     if (current.Nick_named())
 	{
 		current.set_Registered(true);
-        current.send_msg(":localhost " + RPL_WELCOME + current.get_Nickname() + " :Welcome to the Internet Relay Network " + current.get_Nickname() + "!" + current.get_Username() + "@localhost\r\n");
+        current.send_msg(current.msg_host(RPL_WELCOME) + " :Welcome to the Internet Relay Network " + current.make_prefix() + "\r\n");
 	}
 	else {}
 }

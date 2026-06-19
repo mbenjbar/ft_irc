@@ -46,4 +46,5 @@ public:
     void clear_buff();
     void send_msg(const std::string &msg) const;
     std::string make_prefix() const;
+    std::string msg_host(std::string flag) const;
 };
