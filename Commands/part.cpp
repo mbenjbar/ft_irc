@@ -38,9 +38,9 @@ void    Server::Part(Client &current, std::string receive)
         getline(ss, more);
         if (!more.empty()) reason = reason + more;
     }
-    ss.str(arg);
+    std::stringstream ss2(arg);
     std::string name;
-    while (getline(ss, name, ','))
+    while (getline(ss2, name, ','))
     {
         size_t start = name.find_first_not_of(" \t");
 		size_t end = name.find_last_not_of(" \t");
