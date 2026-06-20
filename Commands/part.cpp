@@ -31,22 +31,13 @@ void    Server::Part(Client &current, std::string receive)
 
     std::string reason;
     ss >> reason;
-    if (!reason.empty())
-    {
-        if (reason[0] == ':') reason.erase(0, 1);
-        std::string more;
-        getline(ss, more);
-        if (!more.empty()) reason = reason + more;
-    }
+    std::getline(ss >> std::ws, reason);
+    if (!reason.empty() && reason[0] == ':') reason.erase(0, 1);
+
     std::stringstream ss2(arg);
     std::string name;
     while (getline(ss2, name, ','))
     {
-        // size_t start = name.find_first_not_of(" \t");
-		// size_t end = name.find_last_not_of(" \t");
-        // if (start == std::string::npos)
-		// 	continue;
-		// name = name.substr(start, end - start + 1);
         if (!name.empty())
             handle_part(current, name, reason);
     }
