@@ -42,11 +42,12 @@ void    Server::Part(Client &current, std::string receive)
     std::string name;
     while (getline(ss2, name, ','))
     {
-        size_t start = name.find_first_not_of(" \t");
-		size_t end = name.find_last_not_of(" \t");
-        if (start == std::string::npos)
-			continue;
-		name = name.substr(start, end - start + 1);
-        handle_part(current, name, reason);
+        // size_t start = name.find_first_not_of(" \t");
+		// size_t end = name.find_last_not_of(" \t");
+        // if (start == std::string::npos)
+		// 	continue;
+		// name = name.substr(start, end - start + 1);
+        if (!name.empty())
+            handle_part(current, name, reason);
     }
 }
