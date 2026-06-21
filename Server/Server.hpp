@@ -44,8 +44,8 @@
 #define RPL_INVITING std::string("341 ")
 #define ERR_NOTEXTTOSEND std::string("412 ")
 #define ERR_CANNOTSENDTOCHAN std::string("404 ")
-
-
+#define RPL_CHANNELMODEIS std::string("324 ")
+#define ERR_UNKNOWNMODE std::string("472 ")
 
 class Channel; //circular include loop between Channel.hpp and Server.hpp
 

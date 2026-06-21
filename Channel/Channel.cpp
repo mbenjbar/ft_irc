@@ -35,7 +35,13 @@ void Channel::set_limited(bool value) {limited = value;}
 
 void Channel::set_topic(const std::string &topic) {this->topic = topic;}
 void Channel::set_password(const std::string &password) {this->password = password; set_has_pswd(true);}
-void Channel::set_members_limit(const int members_limit) {this->members_limit = members_limit; set_limited(true);}
+void Channel::remove_password() {password = ""; set_has_pswd(false);}
+void Channel::set_members_limit(const int members_limit) 
+{
+    this->members_limit = members_limit;
+    if (members_limit > 0) set_limited(true);
+    else set_limited(false);
+}
 void Channel::remove_members_limit() {this->members_limit = 0; set_limited(false);}
 
 

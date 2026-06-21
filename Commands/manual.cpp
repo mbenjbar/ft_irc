@@ -1,3 +1,7 @@
 #include "../Server/Server.hpp"
 
-void    Server::Man(Client &, std::string receive) {std::cout << "merci man hhh\n"; (void)receive;}
+void    Server::Man(Client &current, std::string receive)
+{
+    (void)receive;
+    (void)current;
+}

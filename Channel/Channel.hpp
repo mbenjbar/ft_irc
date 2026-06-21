@@ -47,6 +47,7 @@ public:
 
     void set_topic(const std::string &topic);
     void set_password(const std::string &password);
+    void remove_password();
     void set_members_limit(const int members_limit);
     void remove_members_limit();
 
