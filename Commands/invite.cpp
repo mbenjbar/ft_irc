@@ -36,7 +36,7 @@ void    Server::Invite(Client &current, std::string receive)
         {return (current.send_msg(current.msg_host(ERR_NOTONCHANNEL) + " " + cha_name + " :You're not on that channel\r\n"));}
 
     if (chan.get_invit_only() && chan.is_op(current.getFd()) == false)
-        {return (current.send_msg(current.msg_host(ERR_CHANOPRIVSNEEDED) + " " + cha_name + " ::You're not channel operator\r\n"));}
+        {return (current.send_msg(current.msg_host(ERR_CHANOPRIVSNEEDED) + " " + cha_name + " :You're not channel operator\r\n"));}
     
     if (chan.is_user(to_invite->getFd()))
         {return (current.send_msg(current.msg_host(ERR_USERONCHANNEL) + " " + to_invite->get_Nickname() + " " + cha_name + " :is already on channel\r\n"));}

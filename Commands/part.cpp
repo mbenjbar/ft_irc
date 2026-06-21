@@ -30,7 +30,6 @@ void    Server::Part(Client &current, std::string receive)
         return (current.send_msg(current.msg_host(ERR_NEEDMOREPARAMS) + " PART :Not enough parameters\r\n"));
 
     std::string reason;
-    ss >> reason;
     std::getline(ss >> std::ws, reason);
     if (!reason.empty() && reason[0] == ':') reason.erase(0, 1);
 

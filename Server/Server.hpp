@@ -37,6 +37,7 @@
 #define RPL_NAMREPLY std::string("353 ")
 #define RPL_ENDOFNAMES std::string("366 ")
 #define ERR_NOTONCHANNEL std::string("442 ")
+#define ERR_USERNOTINCHANNEL std::string("441 ")
 #define ERR_NOSUCHNICK std::string("401 ")
 #define ERR_CHANOPRIVSNEEDED std::string("482 ")
 #define ERR_USERONCHANNEL std::string("443 ")
