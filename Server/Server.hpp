@@ -42,6 +42,8 @@
 #define ERR_CHANOPRIVSNEEDED std::string("482 ")
 #define ERR_USERONCHANNEL std::string("443 ")
 #define RPL_INVITING std::string("341 ")
+#define ERR_NOTEXTTOSEND std::string("412 ")
+#define ERR_CANNOTSENDTOCHAN std::string("404 ")
 
 
 
